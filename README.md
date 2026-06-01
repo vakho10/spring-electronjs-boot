@@ -105,16 +105,40 @@ spring-electronjs-boot/
                 └── styles.css
 ```
 
+## Packaging (Windows installer)
+
+`electron-builder` bundles the app and the Spring Boot jar into a single
+installer. Build the jar first so it can be embedded as a resource:
+
+```bash
+cd backend
+mvn package -DskipTests          # → backend/target/app.jar
+
+cd ../frontend
+npm run dist:win                 # → frontend/release/spring-electronjs-boot-Setup-<version>.exe
+```
+
+The jar is copied next to the app (`resources/app.jar`); at runtime the main
+process resolves it via `process.resourcesPath` when `app.isPackaged`. Use
+`npm run pack:dir` for a faster unpacked build (`release/win-unpacked/`) when
+you just want to smoke-test packaging without producing an installer.
+
+> The installed app still needs a JRE (21+) on the machine — it calls `java`
+> from `PATH` or `JAVA_HOME`. Bundling a trimmed runtime with `jlink` so users
+> need no Java install is a sensible follow-up.
+
 ## Scripts (frontend)
 
-| Script              | What it does                          |
-| ------------------- | ------------------------------------- |
-| `npm run dev`       | Run the app, backend on port 8080     |
-| `npm run stage`     | Run the app, backend on a random port |
-| `npm run build`     | Build the renderer/main/preload bundles|
-| `npm run typecheck` | `tsc --noEmit`                        |
-| `npm run lint`      | ESLint                                |
-| `npm run format`    | Prettier                              |
+| Script              | What it does                            |
+| ------------------- | --------------------------------------- |
+| `npm run dev`       | Run the app, backend on port 8080       |
+| `npm run stage`     | Run the app, backend on a random port   |
+| `npm run build`     | Build the renderer/main/preload bundles |
+| `npm run pack:dir`  | Unpacked packaged app (`release/win-unpacked/`) |
+| `npm run dist:win`  | Windows installer (`release/*.exe`)     |
+| `npm run typecheck` | `tsc --noEmit`                          |
+| `npm run lint`      | ESLint                                  |
+| `npm run format`    | Prettier                                |
 
 ## Troubleshooting
 

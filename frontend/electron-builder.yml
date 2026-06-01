@@ -1,0 +1,21 @@
+appId: io.github.vakho10.spring-electronjs-boot
+productName: spring-electronjs-boot
+directories:
+  output: release
+files:
+  - out/**/*
+  - package.json
+# Bundle the Spring Boot jar next to the app. At runtime jarPath() resolves it
+# as process.resourcesPath/app.jar when app.isPackaged (see src/main/index.ts).
+# The jar must be built first: (cd ../backend && mvn package -DskipTests).
+extraResources:
+  - from: ../backend/target/app.jar
+    to: app.jar
+win:
+  target: nsis
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  # Dash-cased so the release asset name has no spaces.
+  artifactName: spring-electronjs-boot-Setup-${version}.${ext}
