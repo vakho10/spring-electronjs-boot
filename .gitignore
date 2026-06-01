@@ -1,0 +1,8 @@
+# Aggregated ignores; backend/ and frontend/ have their own as well.
+*.log
+.DS_Store
+
+# Editor / tooling
+.idea/
+.vscode/
+.claude/
