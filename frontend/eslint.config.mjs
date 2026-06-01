@@ -8,6 +8,13 @@ export default tseslint.config(
   ...tseslint.configs.recommended,
   prettier,
   {
+    // Plain-JS build scripts (e.g. scripts/make-runtime.mjs) run under Node.
+    files: ['**/*.mjs'],
+    languageOptions: {
+      globals: { process: 'readonly', console: 'readonly' }
+    }
+  },
+  {
     rules: {
       // Allow intentionally-unused args/vars when prefixed with an underscore
       // (e.g. the ignored `_e` event arg in ipcMain handlers).

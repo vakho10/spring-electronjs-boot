@@ -29,13 +29,25 @@ function preloadPath(): string {
   return existsSync(mjs) ? mjs : join(__dirname, '../preload/index.js')
 }
 
-/** Resolves the `java` executable, honouring JAVA_HOME when it is set. */
+/**
+ * Resolves the `java` executable. A packaged build ships a trimmed runtime
+ * under resources/runtime (see scripts/make-runtime.mjs), so prefer that;
+ * otherwise fall back to JAVA_HOME, then `java` on PATH.
+ */
 function javaExecutable(): string {
+  const exe = process.platform === 'win32' ? 'java.exe' : 'java'
+
+  if (app.isPackaged) {
+    const bundled = join(process.resourcesPath, 'runtime', 'bin', exe)
+    if (existsSync(bundled)) return bundled
+  }
+
   const home = process.env['JAVA_HOME']
   if (home) {
-    const candidate = join(home, 'bin', process.platform === 'win32' ? 'java.exe' : 'java')
+    const candidate = join(home, 'bin', exe)
     if (existsSync(candidate)) return candidate
   }
+
   return 'java'
 }
 

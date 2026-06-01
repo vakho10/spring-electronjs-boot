@@ -123,9 +123,17 @@ process resolves it via `process.resourcesPath` when `app.isPackaged`. Use
 `npm run pack:dir` for a faster unpacked build (`release/win-unpacked/`) when
 you just want to smoke-test packaging without producing an installer.
 
-> The installed app still needs a JRE (21+) on the machine — it calls `java`
-> from `PATH` or `JAVA_HOME`. Bundling a trimmed runtime with `jlink` so users
-> need no Java install is a sensible follow-up.
+### Self-contained — no JRE needed
+
+`npm run make:runtime` ([scripts/make-runtime.mjs](frontend/scripts/make-runtime.mjs))
+uses `jlink` to build a trimmed Java runtime (~80 MB) into `frontend/runtime/`,
+which is then bundled at `resources/runtime/`. The packaged app launches Java
+from there, so **end users do not need Java installed**. Both `pack:dir` and
+`dist:win` run this step automatically; it needs a JDK 21+ (`jlink`) on the
+build machine, via `JAVA_HOME` or `PATH`.
+
+At runtime `javaExecutable()` prefers the bundled runtime when `app.isPackaged`,
+and falls back to `JAVA_HOME` / `PATH` in development.
 
 ## Scripts (frontend)
 
@@ -134,6 +142,7 @@ you just want to smoke-test packaging without producing an installer.
 | `npm run dev`       | Run the app, backend on port 8080       |
 | `npm run stage`     | Run the app, backend on a random port   |
 | `npm run build`     | Build the renderer/main/preload bundles |
+| `npm run make:runtime` | Build the trimmed JRE (`runtime/`) via `jlink` |
 | `npm run pack:dir`  | Unpacked packaged app (`release/win-unpacked/`) |
 | `npm run dist:win`  | Windows installer (`release/*.exe`)     |
 | `npm run typecheck` | `tsc --noEmit`                          |
