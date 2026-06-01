@@ -1,2 +1,3 @@
-# -spring-electronjs-boot
-ElectronJS integration with Spring Boot 
+# Spring ElectronJS Boot
+
+ElectronJS integration with Spring Boot.
