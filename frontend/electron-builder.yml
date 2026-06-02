@@ -14,6 +14,9 @@ extraResources:
   # Trimmed JRE built by scripts/make-runtime.mjs so users need no Java install.
   - from: runtime
     to: runtime
+  # The window icon, resolved at runtime via process.resourcesPath.
+  - from: build/icon.png
+    to: icon.png
 win:
   target: nsis
   # 512×512 PNG; electron-builder derives the multi-resolution .ico from it.

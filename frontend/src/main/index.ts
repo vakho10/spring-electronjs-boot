@@ -58,6 +58,13 @@ function jarPath(): string {
   return join(__dirname, '../../../backend/target/app.jar')
 }
 
+/** The app/window icon, bundled at resources/icon.png in a packaged build. */
+function iconPath(): string {
+  return app.isPackaged
+    ? join(process.resourcesPath, 'icon.png')
+    : join(__dirname, '../../build/icon.png')
+}
+
 /** Loads one of the renderer's HTML entries, from the dev server or disk. */
 function loadRenderer(window: BrowserWindow, page: 'index' | 'splash'): void {
   const rendererUrl = process.env['ELECTRON_RENDERER_URL']
@@ -78,6 +85,7 @@ function createSplashWindow(): void {
     transparent: true,
     backgroundColor: '#00000000',
     title: 'spring-electronjs-boot',
+    icon: iconPath(),
     webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true }
   })
 
@@ -161,6 +169,7 @@ function createMainWindow(): void {
     width: 800,
     height: 600,
     title: 'spring-electronjs-boot',
+    icon: iconPath(),
     // Stay hidden until the renderer is painted; the splash covers the gap.
     show: false,
     backgroundColor: '#1e1e2e',
