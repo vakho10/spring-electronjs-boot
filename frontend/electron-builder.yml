@@ -16,6 +16,8 @@ extraResources:
     to: runtime
 win:
   target: nsis
+  # 512×512 PNG; electron-builder derives the multi-resolution .ico from it.
+  icon: build/icon.png
 nsis:
   oneClick: false
   perMachine: false
